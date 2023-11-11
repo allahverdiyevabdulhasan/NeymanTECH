@@ -1,0 +1,51 @@
+ssh root@164.90.233.187
+parol:neyman2022Tech
+adduser neymantech
+parol:neyman123
+usermod -aG sudo neymantech
+//deploy prosesi
+sudo apt update
+sudo apt install python3-venv python3-dev libpq-dev postgresql postgresql-contrib nginx curl
+
+//database
+sudo -u postgres psql
+CREATE DATABASE neymantech;
+CREATE USER neyman WITH PASSWORD 'neymantech@0122';
+ALTER ROLE neyman SET client_encoding TO 'utf8';
+ALTER ROLE neyman SET default_transaction_isolation TO 'read committed';
+ALTER ROLE neyman SET timezone TO 'UTC';
+GRANT ALL PRIVILEGES ON DATABASE neymantech TO neyman;
+\l listeliyor
+\q cikiyor
+
+//admin panel
+neymantech
+parol:neyman123
+
+server {
+    listen 80;
+    server_name 138.197.182.159;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /home/neymantech/;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/neymantech/neymantech/NeymanTECH/Neyman.sock;
+    }
+}
+
+server {
+    listen 80;
+    server_name  46.101.123.174;
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /root/neymanbackend;
+    }
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/root/neymanbackend/NeymanTECH/Neyman.sock;
+    }
+}
