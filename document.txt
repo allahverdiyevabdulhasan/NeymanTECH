@@ -49,3 +49,23 @@ server {
         proxy_pass http://unix:/root/neymanbackend/NeymanTECH/Neyman.sock;
     }
 }
+///
+git clone https://github.com/allahverdiyevabdulhasan/NeymanTECH.git NeymanTECH
+git clone https://github.com/allahverdiyevabdulhasan/NeymanTECH.git
+mv NeymanTECH/* .
+rm -r NeymanTECH
+
+server {
+    listen 80;
+    server_name 161.35.3.68;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /home/sammy/myprojectdir;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/run/gunicorn.sock;
+    }
+}
